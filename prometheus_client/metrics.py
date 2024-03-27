@@ -86,6 +86,7 @@ def enable_created_metrics():
 class MetricWrapperBase(Collector):
     _type: Optional[str] = None
     _reserved_labelnames: Sequence[str] = ()
+    DEFAULT_BUCKETS = (.005, .01, .025, .05, .075, .1, .25, .5, .75, 1.0, 2.5, 5.0, 7.5, 10.0, INF)
 
     def _is_observable(self):
         # Whether this metric is observable, i.e.
@@ -131,6 +132,7 @@ class MetricWrapperBase(Collector):
                  unit: str = '',
                  registry: Optional[CollectorRegistry] = REGISTRY,
                  _labelvalues: Optional[Sequence[str]] = None,
+                 buckets: Sequence[Union[float, str]] = DEFAULT_BUCKETS,
                  ) -> None:
         self._name = _build_full_name(self._type, name, namespace, subsystem, unit)
         self._labelnames = _validate_labelnames(self, labelnames)
